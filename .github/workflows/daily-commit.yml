@@ -8,16 +8,18 @@ on:
 jobs:
   daily-commit:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GIT_TDS }}  # Use your working PAT
+          # Try PAT first, fallback to GITHUB_TOKEN
+          token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
 
       - name: Setup daily-commits branch
         run: |
-          # Try to checkout the branch, create if it doesn't exist
           git checkout daily-commits 2>/dev/null || git checkout -b daily-commits
 
       - name: Make a change
@@ -34,5 +36,5 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@v0.8.0
         with:
-          github_token: ${{ secrets.GIT_TDS }}  # Use same PAT here
+          github_token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
           branch: daily-commits
