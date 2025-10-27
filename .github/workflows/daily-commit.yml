@@ -2,19 +2,23 @@ name: Daily Commit Workflow
 
 on:
   schedule:
-    # Runs every day at 06:30 UTC (example time, you can change to a fixed time you prefer)
     - cron: "30 6 * * *"
-  workflow_dispatch: # enables manual runs
+  workflow_dispatch:
 
 jobs:
   daily-commit:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # This is crucial!
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: daily-commits  # Checkout the target branch
 
-      - name: Make a change - 23f1000266@ds.study.iitm.ac.in
+      - name: Make a change
         run: |
           echo "Last run on: $(date)" > daily-log.txt
 
@@ -28,5 +32,5 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@v0.8.0
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN_W5 }}
           branch: daily-commits
