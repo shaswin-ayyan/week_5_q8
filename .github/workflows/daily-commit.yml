@@ -15,7 +15,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN_W5 }}
+          token: ${{ secrets.GIT_TDS }}
           ref: daily-commits  # Checkout the target branch
 
       - name: Make a change
@@ -32,5 +32,5 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@v0.8.0
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN_W5 }}
+          github_token: ${{ secrets.GIT_TDS }}
           branch: daily-commits
