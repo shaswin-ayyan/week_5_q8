@@ -1,40 +1,38 @@
-name: Daily Commit Workflow
+name: Daily Commit Workflow - 23f1000266@ds.study.iitm.ac.in
 
 on:
   schedule:
+    # Runs every day at 06:30 UTC
     - cron: "30 6 * * *"
   workflow_dispatch:
 
 jobs:
-  daily-commit:
+  daily-commit-23f1000266:
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout Repository - 23f1000266@ds.study.iitm.ac.in
         uses: actions/checkout@v3
         with:
-          # Try PAT first, fallback to GITHUB_TOKEN
-          token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup daily-commits branch
+      - name: Create daily commit - 23f1000266@ds.study.iitm.ac.in
         run: |
-          git checkout daily-commits 2>/dev/null || git checkout -b daily-commits
-
-      - name: Make a change
-        run: |
-          echo "Last run on: $(date)" > daily-log.txt
-
-      - name: Commit changes
-        run: |
+          # Create or update the log file
+          echo "Daily commit by GitHub Actions - $(date)" >> daily-log.txt
+          
+          # Configure git
           git config --global user.email "23f1000266@ds.study.iitm.ac.in"
           git config --global user.name "GitHub Actions Bot"
+          
+          # Add and commit changes
           git add daily-log.txt
-          git commit -m "Automated daily commit - $(date)" || echo "No changes to commit"
+          git commit -m "Automated daily commit - $(date +'%Y-%m-%d %H:%M:%S')" || exit 0
 
-      - name: Push changes
+      - name: Push changes - 23f1000266@ds.study.iitm.ac.in
         uses: ad-m/github-push-action@v0.8.0
         with:
-          github_token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
-          branch: daily-commits
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref_name }}
